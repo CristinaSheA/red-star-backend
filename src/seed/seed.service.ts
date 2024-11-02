@@ -13,7 +13,6 @@ export class SeedService {
   }
 
 
-
   remove(id: number) {
     return `This action removes a #${id} seed`;
   }
