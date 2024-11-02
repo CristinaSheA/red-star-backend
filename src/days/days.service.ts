@@ -1,26 +1,44 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateDayDto } from './dto/create-day.dto';
 import { UpdateDayDto } from './dto/update-day.dto';
+import { Day } from './entities/day.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class DaysService {
-  create(createDayDto: CreateDayDto) {
-    return 'This action adds a new day';
-  }
+  constructor(
+    @InjectRepository(Day)
+    private readonly daysRepository: Repository<Day>,
+  ) {}
 
-  findAll() {
-    return `This action returns all days`;
+  public async create(CreatedayDto: CreateDayDto): Promise<Day> {
+    const newDay = this.daysRepository.create({ ...CreatedayDto });
+    return await this.daysRepository.save(newDay);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} day`;
+  public async findAll() {
+    return await this.daysRepository.find();
   }
+  public async deleteAllDays() {
+    const query = this.daysRepository.createQueryBuilder('product');
 
-  update(id: number, updateDayDto: UpdateDayDto) {
-    return `This action updates a #${id} day`;
+    try {
+      return await query.delete().where({}).execute();
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
+  private handleDBExceptions(error: any) {
+    if (error.code === '23505') throw new BadRequestException(error.detail);
 
-  remove(id: number) {
-    return `This action removes a #${id} day`;
+    // this.logger.error(error);
+    console.log(error);
+    throw new InternalServerErrorException(
+      'Unexpected error, check server logs',
+    );
   }
 }

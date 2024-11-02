@@ -16,19 +16,4 @@ export class DaysController {
   findAll() {
     return this.daysService.findAll();
   }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.daysService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDayDto: UpdateDayDto) {
-    return this.daysService.update(+id, updateDayDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.daysService.remove(+id);
-  }
 }

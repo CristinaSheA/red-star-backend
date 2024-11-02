@@ -8,6 +8,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { SeedModule } from './seed/seed.module';
+import { Activity } from './activities/entities/activity.entity';
+import { Candy } from './candies/entities/candy.entity';
+import { Day } from './days/entities/day.entity';
 
 @Module({
   imports: [
@@ -25,11 +29,13 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
+      entities: [Activity, Candy, Day]
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
       serveRoot: '/static',
     }),
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],
