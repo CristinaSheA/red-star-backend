@@ -1,26 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCandyDto } from './dto/create-candy.dto';
 import { UpdateCandyDto } from './dto/update-candy.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Candy } from './entities/candy.entity';
 
 @Injectable()
 export class CandiesService {
-  create(createCandyDto: CreateCandyDto) {
-    return 'This action adds a new candy';
-  }
+  constructor(
+    @InjectRepository(Candy)
+    private readonly candiesRepository: Repository<Candy>,
+  ) {}
 
-  findAll() {
-    return `This action returns all candies`;
+  public async create(createCandyDto: CreateCandyDto) {
+    const newCandy = this.candiesRepository.create({
+      ...createCandyDto,
+    });
+    return await this.candiesRepository.save(newCandy);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} candy`;
+  public async findAll() {
+    return await this.candiesRepository.find();
   }
-
-  update(id: number, updateCandyDto: UpdateCandyDto) {
-    return `This action updates a #${id} candy`;
+  public async findOne(id: number) {
+    return await this.candiesRepository.findOneBy({ id: id });
   }
-
-  remove(id: number) {
-    return `This action removes a #${id} candy`;
+  public async update(id: number, updateCandyDto: UpdateCandyDto) {
+    const candy = await this.candiesRepository.preload({
+      ...updateCandyDto,
+      id,
+    });
+    return await this.candiesRepository.save(candy);
+  }
+  public async remove(id: number) {
+    return await this.candiesRepository.delete(id);
   }
 }

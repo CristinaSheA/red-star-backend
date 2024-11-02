@@ -7,11 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   controllers: [ActivitiesController],
   providers: [ActivitiesService],
-  imports: [
-    TypeOrmModule.forFeature([Activity,]),
-  ],
-  exports: [
-    TypeOrmModule
-  ]
+  imports: [TypeOrmModule.forFeature([Activity])],
+  exports: [TypeOrmModule],
 })
 export class ActivitiesModule {}
