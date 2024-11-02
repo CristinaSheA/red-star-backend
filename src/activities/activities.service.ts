@@ -10,24 +10,21 @@ import { InjectRepository } from "@nestjs/typeorm";
 export class ActivitiesService {
   constructor(@InjectRepository(Activity) private readonly activitiesRepository: Repository<Activity>) {}
 
-  public create(createActivityDto: CreateActivityDto) {
-    const newActivity = this.activitiesRepository.create({...createActivityDto});
-    return this.activitiesRepository.save(newActivity);
+  public async create(createActivityDto: CreateActivityDto) {
+    const newActivity = await this.activitiesRepository.create({...createActivityDto});
+    return await this.activitiesRepository.save(newActivity);
   }
-
-  findAll() {
-    return `This action returns all activities`;
+  public async findAll() {
+    return await this.activitiesRepository.find();
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} activity`;
+  public async findOne(id: number) {
+    return await this.activitiesRepository.findOneBy({ id: id });
   }
-
-  update(id: number, updateActivityDto: UpdateActivityDto) {
-    return `This action updates a #${id} activity`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} activity`;
+  public async update(id: number, updateActivityDto: UpdateActivityDto) {
+    const activity = await this.activitiesRepository.preload({ ...updateActivityDto, id });
+    return await this.activitiesRepository.save(activity);
+  } 
+  public async remove(id: number) {
+    return await this.activitiesRepository.delete(id);
   }
 }

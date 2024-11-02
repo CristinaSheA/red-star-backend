@@ -4,9 +4,8 @@ import { AppService } from './app.service';
 import { CandiesModule } from './candies/candies.module';
 import { DaysModule } from './days/days.module';
 import { ActivitiesModule } from './activities/activities.module';
-import { SeedModule } from './seed/seed.module';
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
@@ -15,21 +14,21 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     CandiesModule,
     DaysModule,
     ActivitiesModule,
-    SeedModule,
-    ConfigModule.forRoot(),
 
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
       port: +process.env.DB_PORT,
       database: process.env.DB_NAME,
       username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,      
+      password: process.env.DB_PASSWORD,
       autoLoadEntities: true,
       synchronize: true,
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname,'..','public'),
+      rootPath: join(__dirname, '..', 'public'),
+      serveRoot: '/static',
     }),
   ],
   controllers: [AppController],
