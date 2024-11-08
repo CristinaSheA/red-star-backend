@@ -32,7 +32,7 @@ import { Day } from './days/entities/day.entity';
       entities: [Activity, Candy, Day]
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'static'),
       serveRoot: '/static',
     }),
     SeedModule,

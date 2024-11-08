@@ -19,7 +19,4 @@ export class CreateDayDto {
   @MinLength(1)
   image: string;
 
-  @IsString()
-  @IsOptional()
-  imageInfo?: string;
 }

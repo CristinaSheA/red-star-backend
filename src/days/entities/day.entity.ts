@@ -14,6 +14,4 @@ export class Day {
   @Column({ nullable: false })
   image: string;
 
-  @Column({ nullable: true })
-  imageInfo: string;
 }
